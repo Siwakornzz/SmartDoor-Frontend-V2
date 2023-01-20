@@ -1,0 +1,447 @@
+<div class="grid p-fluid">
+    <!-- titleHarder -->
+    <div class="col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+        <h2>จัดการผู้ใช้</h2>
+    </div>
+    <!-- <<ng-container *ngIf="role==='superAdmin'"></ng-container> -->
+    <div class="col-12 xl:col-12 lg:col-12 md:col-12 sm:col-12">
+        <div class="card">
+            <p-toolbar styleClass="mb-2">
+                <ng-template pTemplate="left">
+                    <h5 class="m-0">ตารางจัดการผู้ใช้</h5>
+                </ng-template>
+                <ng-template pTemplate="right">
+                    <button
+                        pButton
+                        pRipple
+                        class="p-button-success"
+                        type="button"
+                        label="เพิ่มผู้ใช้"
+                        icon="pi pi-plus"
+                        (click)="openNew()"
+                        class="mr-2"
+                        style="width: auto"
+                    ></button>
+                </ng-template>
+            </p-toolbar>
+
+            <p-table
+                #dt1
+                [resizableColumns]="true"
+                responsiveLayout="scroll"
+                dataKey="id"
+                [rows]="10"
+                [showCurrentPageReport]="true"
+                [rowsPerPageOptions]="[10, 25, 50]"
+                [rowHover]="true"
+                styleClass="p-datatable-gridlines"
+                [paginator]="true"
+                [value]="resUserPagination.resData.datas"
+            >
+                <ng-template pTemplate="caption">
+                    <div class="flex justify-content-between flex-column sm:flex-row">
+                        <div class="col-9 flex flex-wrap"></div>
+                        <div class="col-3">
+                            <span class="p-input-icon-left mb-2" style="width: auto">
+                                <i class="pi pi-search"></i>
+                                <input pInputText type="text" [(ngModel)]="reqUserPagination.search" #filter placeholder="ค้นหา" class="w-full" />
+                            </span>
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>
+                            <div class="flex justify-content-between align-items-center">#</div>
+                        </th>
+                        <th>
+                            <div class="flex justify-content-between align-items-center">ชื่อ</div>
+                        </th>
+                        <!-- <th>
+              <div class="flex justify-content-between align-items-center">ชื่อเล่น</div>
+            </th> -->
+                        <th>
+                            <div class="flex justify-content-between align-items-center">เพศ</div>
+                        </th>
+                        <!-- <th>
+              <div class="flex justify-content-between align-items-center">ตำแหน่ง</div>
+            </th> -->
+                        <!-- <th>
+                            <div class="flex justify-content-between align-items-center">สถานะ</div>
+                        </th> -->
+
+                        <th>
+                            <div class="flex justify-content-between align-items-center">จัดการ</div>
+                        </th>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
+                    <tr>
+                        <td style="min-width: 1rem">
+                            {{ (reqUserPagination.page - 1) * reqUserPagination.perPages + (1 + rowIndex) }}
+                        </td>
+
+                        <td style="min-width: 12rem">{{ item.firstName }} {{ item.lastName }}</td>
+                        <!-- <td style="min-width: 5rem">
+                            {{ item.nickname }}
+                        </td> -->
+                        <td style="min-width: 5rem">
+                            {{ item.gender }}
+                        </td>
+                        <!-- <td style="min-width: 10rem">
+                            {{ item.position }}
+                        </td> -->
+                        <!-- <td style="min-width: 5rem"></td> -->
+                        <td style="min-width: 5rem">
+                            <!-- <button pButton type="button" icon="pi pi-external-link" class="p-button-success mr-2"></button> -->
+                            <button
+                                pButton
+                                type="button"
+                                icon="pi pi-user-edit"
+                                class="p-button-warning mr-2"
+                                (click)="openModelEdited(item.id)"
+                            ></button>
+                            <button pButton type="button" icon="pi pi-trash" class="p-button-danger" (click)="delete(item.id)"></button>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="7">No customers found.</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="loadingbody">
+                    <tr>
+                        <td colspan="7">Loading customers data. Please wait.</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+        <!-- addDialog -->
+        <p-dialog
+            [(visible)]="userDialog"
+            [style]="{width: '450px'}"
+            header="ข้อมูลส่วนตัว"
+            [dismissableMask]="true"
+            [modal]="true"
+            styleClass="p-fluid"
+        >
+            <ng-template pTemplate="content ">
+                <div class="field mb-1">
+                    <label></label>
+                    <span class="p-float-label">
+                        <input pInputText type="text" id="username" [(ngModel)]="reqUserRegister.username" required autofocus />
+                        <label htmlFor="username">ชื่อผู้ใช้งาน</label>
+                    </span>
+                    <small class="p-error" *ngIf="submitted && !reqUserRegister.username">Username is required.</small>
+                </div>
+
+                <div class="field">
+                    <label></label>
+                    <span class="p-float-label">
+                        <input pInputText type="password" id="password" [(ngModel)]="reqUserRegister.password" required autofocus />
+                        <label htmlFor="password">รหัสผ่าน</label>
+                    </span>
+                    <small class="p-error" *ngIf="submitted && !reqUserRegister.password"> Password is required.</small>
+                </div>
+
+                <!-- prefix -->
+                <!-- <div class="field mb-0">
+          <div class="formgrid grid">
+            <div class="field col-6">
+              <p-dropdown optionValue="data" optionLabel="name" [(ngModel)]="reqUserRegister.prefix" inputId="prefix"
+                [options]="prefix" placeholder="คำนำหน้า" [showClear]="true">
+              </p-dropdown>
+              <small class="p-error" *ngIf="submitted && !reqUserRegister.prefix">Prefix is required.</small>
+            </div>
+          </div>
+        </div> -->
+
+                <div class="field">
+                    <input
+                        pInputText
+                        class="input-base"
+                        type="text"
+                        id="firstName"
+                        [(ngModel)]="reqUserRegister.firstName"
+                        placeholder="ชื่อ"
+                        required
+                        autofocus
+                    />
+                    <small class="p-error" *ngIf="submitted && !reqUserRegister.firstName">Name is required.</small>
+                </div>
+
+                <div class="field">
+                    <input
+                        pInputText
+                        class="input-base"
+                        type="text"
+                        id="lastName"
+                        [(ngModel)]="reqUserRegister.lastName"
+                        placeholder="นามสกุล"
+                        required
+                        autofocus
+                    />
+                    <small class="p-error" *ngIf="submitted && !reqUserRegister.lastName">Lastname is required.</small>
+                </div>
+
+                <!-- nickname -->
+                <!-- <div class="field">
+          <input pInputText class="input-base" type="text" id="nickname" [(ngModel)]="reqUserRegister.nickname"
+            placeholder="ชื่อเล่น" required autofocus />
+          <small class="p-error" *ngIf="submitted && !reqUserRegister.nickname">Lastname is required.</small>
+        </div> -->
+
+                <div class="field">
+                    <label></label>
+                    <input
+                        pInputText
+                        type="tel"
+                        id="phoneNumber"
+                        [(ngModel)]="reqUserRegister.phoneNumber"
+                        placeholder="เบอร์โทรศัพท์"
+                        required
+                        autofocus
+                    />
+                    <small class="p-error" *ngIf="submitted && !reqUserRegister.phoneNumber">PhoneNumber is required.</small>
+                </div>
+
+                <div class="field mb-0">
+                    <div class="formgrid grid">
+                        <div class="field col-6">
+                            <p-dropdown
+                                optionValue="data"
+                                optionLabel="name"
+                                [(ngModel)]="reqUserRegister.gender"
+                                inputId="gender"
+                                [options]="gender"
+                                placeholder="เพศ"
+                                [showClear]="true"
+                            >
+                            </p-dropdown>
+                            <small class="p-error" *ngIf="submitted && !reqUserRegister.gender">Gender is required.</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- position -->
+                <!-- <div class="field mb-0">
+          <div class="formgrid grid">
+            <div class="field col-6">
+              <p-dropdown optionValue="data" optionLabel="name" [(ngModel)]="reqUserRegister.position"
+                inputId="position" [options]="position" placeholder="ตำแหน่ง" [showClear]="true">
+              </p-dropdown>
+              <small class="p-error" *ngIf="submitted && !reqUserRegister.position">Position is required.</small>
+            </div>
+          </div>
+        </div> -->
+
+                <!-- role -->
+                <!-- <div class="field mb-0">
+          <div class="formgrid grid">
+            <div class="field col-6">
+              <p-dropdown optionValue="data" optionLabel="name" [(ngModel)]="reqUserRegister.role" inputId="role"
+                [options]="role" placeholder="บทบาท" [showClear]="true">
+              </p-dropdown>
+              <small class="p-error" *ngIf="submitted && !reqUserRegister.role">Role is required.</small>
+            </div>
+          </div>
+        </div> -->
+
+                <!-- <div class="field">
+          <div class="card card-img p-pointer">
+            <div class="row">
+              <div class="col-6">
+                <div class="row">
+                  <div class="col-10">
+                    <input type="file" name="file" (change)="handleUpload($event)" id="file"
+                      class="inputfile p-pointer" />
+                    <label for="file" class="p-pointer img-label"> เลือกรูปภาพ</label>
+                  </div>
+                  <div class="col-2">
+                    <i class="bi bi-image img-icon"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="row">
+              <div class="col-12">
+                <div *ngIf="imgUser && imgUser !== ''">
+                  <div class="card">
+                    <div class="card-body">
+                      <img style="width: 120px; margin-top: 20px" [src]="imgUser" alt="" />
+                    </div>
+                    <div>
+                      <i class="bi bi-x-circle-fill details-icon" (click)="deleteImg()"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button (click)="base64Remove()">test</button> -->
+
+                <!-- <small class="p-error" *ngIf="submitted && !reqUserRegister.imageUser">ImageUser is required.</small> -->
+                <!-- </div> -->
+            </ng-template>
+
+            <ng-template pTemplate="footer">
+                <button
+                    pButton
+                    pRipple
+                    type="button"
+                    label="Cancel"
+                    class="p-button-danger p-button-text"
+                    icon="pi pi-times"
+                    (click)="hideDialog()"
+                ></button>
+                <button
+                    pButton
+                    pRipple
+                    type="button"
+                    label="Save"
+                    class="p-button"
+                    [disabled]="checkDisabled()"
+                    (click)="saveUser()"
+                    icon="pi pi-check"
+                ></button>
+            </ng-template>
+        </p-dialog>
+        <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+    </div>
+
+    <!-- updateDialog -->
+    <p-dialog [(visible)]="userUpdateDialog" [style]="{width: '450px'}" [dismissableMask]="true" [modal]="true" class="p-fluid">
+        <ng-template pTemplate="content">
+            <div class="col-12 mb-0 lg:col-12 lg:mb-0 p-dialog-header lineHeader__title">
+                <span class="p-dialog-title">ข้อมูลส่วนตัว</span>
+            </div>
+            <!-- <div class="col-12 mb-2 lg:col-12 lg:mb-2 ">
+        <h5>ข้อมูลส่วนตัว</h5>
+      </div> -->
+            <div>
+                <hr class="lineHeader" style="height: 1px; background-color: #d1d3d4; width: 100%" />
+            </div>
+
+            <div class="col-12 mb-2 lg:col-12 lg:mb-2">
+                <span class="p-float-label">
+                    <input pInputText id="username" type="text" [(ngModel)]="reqUserRegister.username" />
+                    <label htmlFor="username">ชื่อผู้ใช้งาน</label>
+                </span>
+            </div>
+
+            <div class="col-12 mb-2 lg:col-12 lg:mb-0">
+                <span class="p-float-label">
+                    <input pInputText id="password" type="password" [(ngModel)]="reqUserRegister.password" />
+                    <label htmlFor="password">รหัสผ่าน</label>
+                </span>
+            </div>
+            <div class="col-12 mb-2 lg:col-9 lg:mb-0">
+                <div style="display: flex">
+                    <!-- {{reqUserRegister.prefix | json}} -->
+                    <!-- <p style="background-color : #333; color : #fff">{{reqUserRegister.prefix}}</p> -->
+                    <!-- <p style="background-color : #333; color : #ffff">{{prefix[0]}}</p> -->
+
+                    <!-- prefix -->
+                    <!-- <p-dropdown optionValue="data" optionLabel="name" placeholder="คำนำหน้า" [options]="prefix"
+            [(ngModel)]="reqUserRegister.prefix" [showClear]="true">
+          </p-dropdown> -->
+                </div>
+            </div>
+            <div class="col-12 mb-2 lg:col-12 lg:mb-0">
+                <input pInputText class="input-base" type="text" placeholder="ชื่อ *" id="firstName" [(ngModel)]="reqUserRegister.firstName" />
+            </div>
+            <div class="col-12 mb-2 lg:col-12 lg:mb-0">
+                <input pInputText class="input-base" type="text" placeholder="นามสกุล *" id="lastName" [(ngModel)]="reqUserRegister.lastName" />
+            </div>
+
+            <!-- nickname -->
+            <!-- <div class="col-12 mb-2 lg:col-12 lg:mb-0">
+        <input pInputText class="input-base ta-l pl-10" type="text" placeholder="ชื่อเล่น *" id="nickname"
+          [(ngModel)]="reqUserRegister.nickname" />
+      </div> -->
+
+            <div class="col-12 mb-2 lg:col-9 lg:mb-0">
+                <div style="display: flex">
+                    <!-- <select required class="input-base ta-l pl-10">
+                <option value="" selected disabled hidden>เพศ *
+                </option>
+                <option *ngFor="let item of genderAdd" value="{{item.value}}">
+                              {{item.name}}</option> -->
+                    <p-dropdown
+                        optionValue="data"
+                        optionLabel="name"
+                        placeholder="เพศ"
+                        [options]="gender"
+                        [(ngModel)]="reqUserRegister.gender"
+                        [showClear]="true"
+                    >
+                    </p-dropdown>
+                </div>
+            </div>
+            <!-- <input type="text" pInputText [(ngModel)]="provinceBody.name" required autofocus
+              [ngClass]="{'ng-invalid ng-dirty' : submitted && !provinceBody.name}" />
+          {{provinceBody.name}} -->
+            <!-- <input type="text" pInputText required autofocus /> -->
+
+            <!-- position -->
+            <!-- <div class="col-12 mb-2 lg:col-9 lg:mb-0">
+        <p-dropdown optionValue="data" optionLabel="name" placeholder="ตำแหน่ง" [options]="position"
+          [(ngModel)]="reqUserRegister.position" [showClear]="true">
+        </p-dropdown>
+      </div> -->
+
+            <!-- role -->
+            <div class="col-12 mb-2 lg:col-9 lg:mb-0">
+                <p-dropdown
+                    optionValue="data"
+                    optionLabel="name"
+                    placeholder="บทบาท"
+                    [options]="role"
+                    [(ngModel)]="reqUserRegister.role"
+                    [showClear]="true"
+                >
+                </p-dropdown>
+            </div>
+
+            <div class="col-12 mb-2 lg:col-12 lg:mb-0">
+                <input
+                    pInputText
+                    class="input-base ta-l pl-10"
+                    type="tel"
+                    placeholder="เบอร์โทรศัพท์ *"
+                    maxlength="10"
+                    id="phoneNumber"
+                    [(ngModel)]="reqUserRegister.phoneNumber"
+                />
+            </div>
+
+            <!-- upload imageuser -->
+
+            <!-- <div class="col-12 mb-2 lg:col-12 lg:mb-0"> -->
+            <!-- <p-fileUpload
+                    mode="basic"
+                    accept="image/*"
+                    chooseLabel="อัพโหลดรูปภาพ"
+                    (uploadHandler)="checkImage($event)"
+                >
+                </p-fileUpload> -->
+            <!-- <input type="file" accept="image/*" [(ngModel)]="reqUserRegister.imageUser" />
+      </div> -->
+
+            <div>
+                <hr style="height: 1px; background-color: #d1d3d4; width: 100%" />
+            </div>
+        </ng-template>
+        <ng-template pTemplate="footer">
+            <div class="lineFooter">
+                <button pButton pRipple label="Cancel" (click)="hideDialog()" icon="pi pi-times" class="p-button-text"></button>
+                <button pButton pRipple label="Save" (click)="saveUser()" icon="pi pi-check" class="p-button"></button>
+            </div>
+        </ng-template>
+    </p-dialog>
+</div>

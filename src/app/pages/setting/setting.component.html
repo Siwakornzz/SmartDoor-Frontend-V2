@@ -1,0 +1,56 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <div class="p-fluid">
+                <h5>Theme Color</h5>
+                <p-dropdown
+                    [options]="themList"
+                    [(ngModel)]="ngThemList"
+                    (ngModelChange)="ngThemListChange()"
+                    placeholder="Select a City"
+                    optionLabel="name"
+                    [filter]="true"
+                    filterBy="name"
+                >
+                    <ng-template pTemplate="selectedItem">
+                        <div class="country-item country-item-value" style="display: flex" *ngIf="ngThemList">
+                            <img
+                                src="https://singlecolorimage.com/get/{{ ngThemList.color }}/100x100"
+                                [class]="'mr-2 flag flag-1'"
+                                style="width: 20px"
+                            />
+                            <div>{{ ngThemList.name }}</div>
+                        </div>
+                    </ng-template>
+
+                    <ng-template let-group pTemplate="group">
+                        <div class="flex align-items-center">
+                            <img src="https://singlecolorimage.com/get/{{ group.color }}/100x100" [class]="'mr-2 flag flag-1'" style="width: 20px" />
+                            <span>{{ group.name }}</span>
+                        </div>
+                    </ng-template>
+                </p-dropdown>
+            </div>
+            <div class="p-card-footer ng-star-inserted mt-4">
+                <div class="flex flex-row-reverse flex-wrap card-container">
+                    <div class="flex align-items-center justify-content-center m-2">
+                        <button pripple="" class="p-ripple p-element p-button p-component" type="button">
+                            <span class="p-button-label ng-star-inserted"> <i class="pi pi-save"></i> Save </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card p-fluid">
+            <h5>Vertical Grid</h5>
+            <div class="p-formgrid grid">
+                <div class="field col">
+                    <label htmlfor="name2">Name</label><input pinputtext="" id="name2" type="text" class="p-inputtext p-component p-element" />
+                </div>
+                <div class="field col">
+                    <label htmlfor="email2">Email</label><input pinputtext="" id="email2" type="text" class="p-inputtext p-component p-element" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

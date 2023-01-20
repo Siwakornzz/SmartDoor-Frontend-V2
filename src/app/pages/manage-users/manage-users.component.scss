@@ -1,0 +1,87 @@
+.lineHeader {
+    margin: -10px 0px 20px 0px;
+}
+
+.lineFooter {
+    padding: 10px 10px 0px 10px;
+}
+
+.lineHeader__title {
+    background: linear-gradient(145deg, #0f2e3b 50%, #204a5a 60%, #dff0f2 100%);
+    position: absolute;
+    top: -5px;
+    left: 0px;
+    color: #fff;
+    z-index: 0;
+}
+
+.inputfile {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+.inputfile + label {
+    font-size: 14px;
+    font-weight: 700;
+    color: rgb(86, 86, 86);
+    display: inline-block;
+}
+
+.card-img {
+    width: 175px;
+    height: 35px;
+    border-radius: 7px;
+    text-align: center;
+}
+.card-img:hover {
+    background-color: rgb(84, 223, 111);
+}
+
+.p-pointer {
+    cursor: pointer; /* "hand" cursor */
+}
+
+i:not([class~='pi']) {
+    background-color: transparent;
+    color: #585858;
+    font-family: Monaco, courier, monospace;
+    font-style: normal;
+    font-size: 18px;
+    font-weight: 500;
+    padding: 0 4px;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+    margin: 0 2px;
+    display: inline-flex;
+}
+
+.img-label {
+    position: absolute;
+    top: 10px;
+    left: 25px;
+}
+.img-icon {
+    position: absolute;
+    top: 11px;
+    left: 15vh;
+}
+
+.details-img {
+    font-size: 12px;
+    position: absolute;
+    bottom: 15%;
+    color: rgb(86, 86, 86);
+    left: 220px;
+}
+.details-icon {
+    font-size: 12px;
+    position: absolute;
+    color: rgb(86, 86, 86);
+    cursor: pointer;
+    left: 142px;
+    top: 45px;
+}

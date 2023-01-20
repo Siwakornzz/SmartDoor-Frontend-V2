@@ -1,0 +1,27 @@
+<div class="layout-topbar">
+    <a class="layout-topbar-logo" routerLink="">
+        <!-- <img src="assets/layout/images/{{appMain.config.dark ? 'logo-white' : 'logo-dark'}}.svg" alt="logo"> -->
+        <span>SMART-DOOR</span>
+    </a>
+
+    <a class="p-link layout-menu-button layout-topbar-button" href="#" (click)="appMain.toggleMenu($event)">
+        <i class="pi pi-bars"></i>
+    </a>
+
+    <a class="p-link layout-topbar-menu-button layout-topbar-button" href="#" (click)="appMain.toggleTopMenu($event)">
+        <i class="pi pi-ellipsis-v"></i>
+    </a>
+
+    <div class="layout-topbar-menu" [ngClass]="{'layout-topbar-menu-mobile-active': appMain.topMenuActive}">
+        <!-- profilePage wait for create component -->
+
+        <!-- <a routerLink="/profile" class="p-link layout-topbar-button">
+            <i class="pi pi-user"></i>
+            <span>Profile</span>
+        </a> -->
+        <a routerLink="/logout" class="p-link layout-topbar-button">
+            <i class="pi pi-sign-out"></i>
+            <span>SignOut</span>
+        </a>
+    </div>
+</div>
