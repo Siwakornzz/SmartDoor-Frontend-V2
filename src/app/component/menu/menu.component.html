@@ -6,7 +6,7 @@
             </div>
             <ul role="menu" *ngIf="model.length >0">
                 <ng-container *ngFor="let child of item.items">
-                    <ng-container *ngIf="child.isShow" >
+                    <ng-container *ngIf="!child.disabled">
                         <li app-menuitem [item]="child" [index]="i" role="none" (click)="clickMenu($event)"></li>
                     </ng-container>
                 </ng-container>

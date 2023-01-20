@@ -52,7 +52,7 @@ export class MenuComponent implements OnInit {
                         label: 'จัดการประตู ',
                         icon: 'pi pi-fw pi-home',
                         routerLink: ['pages/manage-doors'],
-                        isShow: true
+                        disabled: false
                     },
                     // HeadTitle 4 
 
@@ -60,7 +60,7 @@ export class MenuComponent implements OnInit {
                         label: 'จัดการผู้ใช้งาน',
                         icon: 'pi pi-fw pi-user',
                         routerLink: ['pages/manage-users'],
-                        isShow: await this.appService.getRoleInfo() === 'superAdmin' ? true : false,
+                        disabled: await this.appService.getRoleInfo() === 'superAdmin' ? false : true,
                     }
                 ]
             },
@@ -71,7 +71,7 @@ export class MenuComponent implements OnInit {
                         label: 'TestApiFakeJson',
                         icon: 'pi pi-fw  pi-cog',
                         routerLink: ['/pages/fakeJson'],
-                        isShow: true
+                        disabled: false
                     }
                 ]
             },
@@ -82,7 +82,7 @@ export class MenuComponent implements OnInit {
                         label: 'product',
                         icon: 'pi pi-fw  pi-cog',
                         routerLink: ['/pages/product'],
-                        isShow: true
+                        disabled: false
                     }
                 ]
             },
@@ -93,7 +93,7 @@ export class MenuComponent implements OnInit {
                         label: 'ผู้ดูแลระบบ',
                         icon: 'pi pi-fw  pi-cog',
                         routerLink: ['/pages/timeline'],
-                        isShow: true
+                        disabled: true
                     }
                 ]
             }
